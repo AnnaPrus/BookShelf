@@ -8,7 +8,10 @@ class SearchPage extends React.Component {
         this.state = { bookTitle: 'Ender\'s Game' };
         this.state = { bookCover: '' };
     };
-
+    state = {
+        query: '',
+        showSearchPage: false,
+    };
     handleChange(e) {
         this.setState({ bookName: e.target.value });
     };
@@ -21,7 +24,7 @@ class SearchPage extends React.Component {
                 }))
             })
     }
-    addBook = (book) => {
+  /*  addBook = (book) => {
         BooksAPI.create(book)
             .then((book) => {
                 this.setState((currentState) => ({
@@ -29,10 +32,36 @@ class SearchPage extends React.Component {
                 }))
             })
     }
+*/
+    updateQuery = (query) => {
+        this.setState(() => ({
+            query: query.trim()
+        }))
+    }
     render() {
     
         return (
-            <h1> Hello! </h1>
+            <div className="search-books">
+                <div className="search-books-bar">
+                 <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
+                    <div className="search-books-input-wrapper">
+                        {
+                        
+                        
+                        
+                        }
+                        <input 
+                        type="text" 
+                        placeholder="Search by title or author" 
+                        value={this.state.query}
+                        onChange={(event) => this.updateQuery(event.target.value)} />
+
+                    </div>
+                </div>
+                <div className="search-books-results">
+                    <ol className="books-grid"></ol>
+                </div>
+            </div>
         )
     }
 }
