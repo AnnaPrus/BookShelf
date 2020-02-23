@@ -3,18 +3,24 @@ import Shelf from './Shelf' ;
 import PropTypes from "prop-types";
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  NavLink,
   Link
 } from "react-router-dom";
-import ReactDOM from "react-dom";
-import SearchPage from "./SearchPage";
+//import SearchPage from "./SearchPage";
 
 class HomePage extends React.Component {
+  constructor(props) {
+    super(props);
+  };
+  
   
   render() {
-    
+    // Properties
+    const books = this.props.books; 
+    const currentlyReadingBooks = books.filter(book => book.shelf = "currentlyReading");
+    const wantToReadBooks = books.filter(book => book.shelf = "wantToRead");
+    const readBooks = books.filter(book => book.shelf = "read");
+
+  console.log('read books',readBooks)
     return (
       <Router>
         <div className="list-books">
@@ -23,9 +29,9 @@ class HomePage extends React.Component {
           </div>
           <div className="list-books-content">
             <div>
-              <Shelf name="Current reading" />
-              <Shelf name="Want to read" />
-              <Shelf name="Read" />
+              <Shelf name="Current reading"  books={currentlyReadingBooks}  /> 
+              <Shelf name="Want to read"  books={wantToReadBooks} />
+              <Shelf name="Read" books={readBooks} />
             </div>
           </div>
           <div className="open-search">
