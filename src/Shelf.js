@@ -16,7 +16,7 @@ class Shelf extends React.Component {
             <div className="bookshelf-books">
               <ol className="books-grid">
               {books && books.map(book => {
-              return <Book book={book} />;
+              return <Book  book={book} />;
             })}
                 
               </ol>
