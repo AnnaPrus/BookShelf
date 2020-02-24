@@ -16,9 +16,9 @@ class HomePage extends React.Component {
   render() {
     // Properties
     const books = this.props.books; 
-    const currentlyReadingBooks = books.filter(book => book.shelf = "currentlyReading");
-    const wantToReadBooks = books.filter(book => book.shelf = "wantToRead");
-    const readBooks = books.filter(book => book.shelf = "read");
+    const currentlyReadingBooks = books.filter(book => book.shelf === "currentlyReading");
+    const wantToReadBooks = books.filter(book => book.shelf ==="wantToRead");
+    const readBooks = books.filter(book => book.shelf === "read");
 
   console.log('read books',readBooks)
     return (
