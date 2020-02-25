@@ -8,14 +8,10 @@ import {
 //import SearchPage from "./SearchPage";
 
 class HomePage extends React.Component {
-  constructor(props) {
-    super(props);
-  };
-  
-  
+
   render() {
     // Properties
-    const books = this.props.books; 
+    const {books, onChange} = this.props; 
     const currentlyReadingBooks = books.filter(book => book.shelf === "currentlyReading");
     const wantToReadBooks = books.filter(book => book.shelf ==="wantToRead");
     const readBooks = books.filter(book => book.shelf === "read");
@@ -29,19 +25,24 @@ class HomePage extends React.Component {
           </div>
           <div className="list-books-content">
             <div>
-              <Shelf name="Current reading"  books={currentlyReadingBooks}  /> 
-              <Shelf name="Want to read"  books={wantToReadBooks} />
-              <Shelf name="Read" books={readBooks} />
+              <Shelf
+                onChange={onChange}
+                name="Current reading"
+                books={currentlyReadingBooks}
+              />
+              <Shelf
+                onChange={onChange}
+                name="Want to read"
+                books={wantToReadBooks}
+              />
+              <Shelf onChange={onChange} name="Read" books={readBooks} />
             </div>
           </div>
           <div className="open-search">
-           
             <Link to="/search">
-              <button onClick ></button>
+              <button onClick></button>
             </Link>
-           
           </div>
-        
         </div>
       </Router>
     );
