@@ -1,45 +1,38 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import Book from './Book';
-import * as BooksAPI from './BooksAPI'
+
 
 class SearchPage extends React.Component {
 
-  state = {
-    query: ""
-  };
-
-  updateQuery = (event) => {
-    const { value } = event.target;
-    const booksSearched = BooksAPI.search(value)
-    console.log('query:', value, booksSearched)
-    
-
-
-  }
 
   render() {
-    const { query, books} = this.state
-  
+    const { onChange, books} = this.props;
+
     return (
       <div className="search-books">
         <div className="search-books-bar">
         <Link to='/'>
-            <button className="close-search" onClick >Close</button>
+            <button className="close-search"  >Close</button>
         </Link>
           <div className="search-books-input-wrapper">
             {}
             <input
               type="text"
               placeholder="Search by title or author"
-              onChange={event => this.updateQuery(event)}
-           
+              onChange={event => onChange(event)}// onChange={event => onChange(event, book)}
             />
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
-          
+     
+          <ol className="books-grid">
+          {books && books.map((book, index) => {
+              return <Book key={book.id}  book={book} index={index} onChange={onChange} />;
+            })
+          }
+          </ol>
+ 
         </div>
       </div>
     );

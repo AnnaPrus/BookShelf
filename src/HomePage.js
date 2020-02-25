@@ -1,16 +1,13 @@
 import React from 'react';
 import Shelf from './Shelf' ;
-import PropTypes from "prop-types";
 import {
   BrowserRouter as Router,
   Link
 } from "react-router-dom";
-//import SearchPage from "./SearchPage";
 
 class HomePage extends React.Component {
 
   render() {
-    // Properties
     const {books, onChange} = this.props; 
     const currentlyReadingBooks = books.filter(book => book.shelf === "currentlyReading");
     const wantToReadBooks = books.filter(book => book.shelf ==="wantToRead");
@@ -40,7 +37,7 @@ class HomePage extends React.Component {
           </div>
           <div className="open-search">
             <Link to="/search">
-              <button onClick></button>
+              <button onClick ></button>
             </Link>
           </div>
         </div>

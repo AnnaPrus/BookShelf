@@ -10,8 +10,22 @@ import HomePage from './HomePage';
 
 class BooksApp extends React.Component {
   state = {
-    books: []
+    books: [],
+    booksSearched: [],
+    query: ""
   };
+
+
+  updateQuery = (event) => { 
+    const { value } = event.target;
+    console.log('query:', value)
+    BooksAPI.search(value).then(booksSearched => {
+      console.log("booksSearched: ", booksSearched);
+      this.setState(() => ({
+        booksSearched
+      }));
+    });
+  }
   componentDidMount() {
     BooksAPI.getAll().then(books => {
       console.log("books: ", books);
@@ -41,7 +55,7 @@ class BooksApp extends React.Component {
             path="/"
             render={() => <HomePage books={this.state.books} onChange={this.onSelfChange} />}
           />
-          <Route exact path="/search" render={() => <SearchPage />} />
+          <Route exact path="/search" render={() => <SearchPage books={this.state.booksSearched} onChange={this.updateQuery} />} />
         </div>
       </Router>
     );
