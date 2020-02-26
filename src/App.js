@@ -21,17 +21,15 @@ class BooksApp extends React.Component {
     console.log('query:', value)
     BooksAPI.search(value).then(booksSearched => {
       console.log("booksSearched: ", booksSearched);
-      this.setState(() => ({
-        booksSearched
-      }));
-    });
+      booksSearched && booksSearched.length 
+      ? this.setState({ booksSearched }) 
+      : this.setState({ booksSearched: [] });
+    }).catch(error => console.log(error));
   }
   componentDidMount() {
     BooksAPI.getAll().then(books => {
       console.log("books: ", books);
-      this.setState(() => ({
-        books
-      }));
+      this.setState({books});
     });
   }
 
@@ -44,6 +42,7 @@ class BooksApp extends React.Component {
     this.setState({
       books: modifiedBooks
     });
+    BooksAPI.update(book, value)
   }
 
   render() {
