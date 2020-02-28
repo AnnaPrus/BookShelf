@@ -23,7 +23,7 @@ class Book extends React.Component {
               }}
             >
               <img
-                src={book.imageLinks.smallThumbnail}
+                src={book.imageLinks ? book.imageLinks.smallThumbnail : ''}
                 alt=""
                 style={{
                   width: 128,

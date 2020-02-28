@@ -26,31 +26,52 @@ class BooksApp extends React.Component {
     const { books } = this.state;
     BooksAPI.search(value)
       .then(booksSearched => {
-        if (booksSearched && booksSearched.length) {
-          const newBooks = this.setDefaultShelves(booksSearched);
-          this.setState({ booksSearched, books: [...books, ...newBooks] });
-        } else {
-          this.setState({ booksSearched: [] });
-        }
+        
+        const newBooks = this.setDefaultShelves(booksSearched);
+        this.setState({ booksSearched: newBooks });
+
+        // if (booksSearched && booksSearched.length) {
+        //   const newBooks = this.setDefaultShelves(booksSearched);
+        //   this.setState({ booksSearched, books: [...books, ...newBooks] });
+        //   console.log(books)
+        //  // BooksAPI.update(book, value);
+        // } else {
+        //   this.setState({ booksSearched: [] });
+        // }
       })
       .catch(error => console.log(error));
   };
   componentDidMount() {
+    this.upd();
+  };
+  
+  upd = () => {
     BooksAPI.getAll().then(books => {
       console.log("books: ", books);
       this.setState({ books });
     });
-  }
+  };
+
   onSelfChange = (event, book) => {
     const { value } = event.target;
     const { books } = this.state;
-    const index = books.indexOf(book);
     const modifiedBooks = [...books];
-    modifiedBooks[index].shelf = value;
+    const index = modifiedBooks.indexOf(book);
+    if (index >= 0) {
+      modifiedBooks[index].shelf = value;
+    } else {
+      book.shelf = value
+      modifiedBooks.push(book)
+    }
+
     this.setState({
       books: modifiedBooks
     });
-    BooksAPI.update(book, value);
+
+    BooksAPI.update(book, value).then(()=> {
+      this.upd();
+    });
+
   };
   render() {
     return (
