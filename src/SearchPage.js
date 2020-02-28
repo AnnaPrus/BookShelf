@@ -7,7 +7,7 @@ class SearchPage extends React.Component {
 
 
   render() {
-    const { onChange, books} = this.props;
+    const { onSearch, onChange, books} = this.props;
 
     return (
       <div className="search-books">
@@ -20,7 +20,7 @@ class SearchPage extends React.Component {
             <input
               type="text"
               placeholder="Search by title or author"
-              onChange={event => onChange(event)}// onChange={event => onChange(event, book)}
+              onChange={event => onSearch(event)}// onChange={event => onChange(event, book)}
             />
           </div>
         </div>

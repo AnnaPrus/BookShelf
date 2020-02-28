@@ -15,17 +15,34 @@ class BooksApp extends React.Component {
     query: ""
   };
 
+  setDefaultShelves = (searchedBooks, myBooks) => {
+
+    console.log('searchedBooks', searchedBooks)
+
+    return searchedBooks.map(book => {
+      book.shelf = "none";
+      myBooks.forEach(myBook => {
+        if (myBook.id === book.id) {
+          book.shelf = myBook.shelf;
+        }
+      });
+      return book;
+    });
+  };
 
   updateQuery = (event) => { 
     const { value } = event.target;
-    console.log('query:', value)
+    console.log('query:', value);
+
     BooksAPI.search(value).then(booksSearched => {
-      console.log("booksSearched: ", booksSearched);
       booksSearched && booksSearched.length 
       ? this.setState({ booksSearched }) 
       : this.setState({ booksSearched: [] });
+      
+      this.setDefaultShelves(booksSearched, this.props.books);
     }).catch(error => console.log(error));
   }
+
   componentDidMount() {
     BooksAPI.getAll().then(books => {
       console.log("books: ", books);
@@ -54,7 +71,7 @@ class BooksApp extends React.Component {
             path="/"
             render={() => <HomePage books={this.state.books} onChange={this.onSelfChange} />}
           />
-          <Route exact path="/search" render={() => <SearchPage books={this.state.booksSearched} onChange={this.updateQuery} />} />
+          <Route exact path="/search" render={() => <SearchPage books={this.state.booksSearched} onChange={this.updateQuery} onSearch={this.updateQuery} />} />
         </div>
       </Router>
     );
