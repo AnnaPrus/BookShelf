@@ -7,8 +7,7 @@ import HomePage from "./HomePage";
 class BooksApp extends React.Component {
   state = {
     books: [],
-    booksSearched: [],
-    query: ""
+    booksSearched: []
   };
   setDefaultShelves = searchedBooks => {
     const myBooks = this.state.books;
