@@ -6,14 +6,6 @@ class SearchPage extends React.Component {
 
   render() {
     const { onSearch, onChange, books} = this.props;
-  /*  const ifUnique = books.filter((book => {
-      if (books.has(book)) {
-        return false;
-      }
-      return true;
-    }));
-    const filteredBooks = books.filter(book => book.shelf === "none" || ifUnique);*/
-    
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -25,7 +17,7 @@ class SearchPage extends React.Component {
             <input
               type="text"
               placeholder="Search by title or author"
-              onChange={event => onSearch(event)}// onChange={event => onChange(event, book)}
+              onChange={event => onSearch(event)}
             />
           </div>
         </div>
@@ -33,11 +25,14 @@ class SearchPage extends React.Component {
      
           <ol className="books-grid">
             {books && books.map((book, index) => {
-              if (book.shelf=== 'none'){
-              return <Book key={book.id}  book={book} index={index} onChange={onChange} />;
-            } else{return console.log('this book is already in the shelves');}
-          })
-          }
+              if (book.shelf === 'none'){
+                return <Book key={book.id}  book={book} index={index} onChange={onChange} />;
+              } 
+              else {
+                return console.log('This book is already in the shelves');
+              }
+            })
+            }
           </ol>
  
         </div>

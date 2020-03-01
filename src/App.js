@@ -9,6 +9,12 @@ class BooksApp extends React.Component {
     books: [],
     booksSearched: []
   };
+  componentDidMount() {
+    BooksAPI.getAll().then(books => {
+      console.log("books: ", books);
+      this.setState({ books });
+    });
+  };
   setDefaultShelves = searchedBooks => {
     const myBooks = this.state.books;
     return searchedBooks.map(book => {
@@ -23,37 +29,15 @@ class BooksApp extends React.Component {
   };
   updateQuery = event => {
     const { value } = event.target;
-    const { books } = this.state;
     BooksAPI.search(value)
       .then(booksSearched => {
-        
         const newBooks = this.setDefaultShelves(booksSearched);
         this.setState({ booksSearched: newBooks });
-
-        // if (booksSearched && booksSearched.length) {
-        //   const newBooks = this.setDefaultShelves(booksSearched);
-        //   this.setState({ booksSearched, books: [...books, ...newBooks] });
-        //   console.log(books)
-        //  // BooksAPI.update(book, value);
-        // } else {
-        //   this.setState({ booksSearched: [] });
-        // }
       })
       .catch(error => console.log(error));
-  };
-  componentDidMount() {
-    this.upd();
-  };
-  
-  upd = () => {
-    BooksAPI.getAll().then(books => {
-      console.log("books: ", books);
-      this.setState({ books });
-    });
-  };
-
-  onSelfChange = (event, book) => {
-    const { value } = event.target;
+  };ß
+  onShelfChange = (event, book) => {
+    const { value } = event.target; 
     const { books } = this.state;
     const modifiedBooks = [...books];
     const index = modifiedBooks.indexOf(book);
@@ -63,15 +47,10 @@ class BooksApp extends React.Component {
       book.shelf = value
       modifiedBooks.push(book)
     }
-
     this.setState({
       books: modifiedBooks
     });
-
-    BooksAPI.update(book, value).then(()=> {
-      this.upd();
-    });
-
+    BooksAPI.update(book, value);
   };
   render() {
     return (
@@ -81,7 +60,7 @@ class BooksApp extends React.Component {
             exact
             path="/"
             render={() => (
-              <HomePage books={this.state.books} onChange={this.onSelfChange} />
+              <HomePage books={this.state.books} onChange={this.onShelfChange} />
             )}
           />
           <Route
@@ -90,7 +69,7 @@ class BooksApp extends React.Component {
             render={() => (
               <SearchPage
                 books={this.state.booksSearched}
-                onChange={this.onSelfChange}
+                onChange={this.onShelfChange}
                 onSearch={this.updateQuery}
               />
             )}
