@@ -1,7 +1,7 @@
 import React from "react";
 import * as BooksAPI from "./BooksAPI";
 import "./App.css";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import SearchPage from "./SearchPage";
 import HomePage from "./HomePage";
 class BooksApp extends React.Component {
@@ -70,7 +70,6 @@ class BooksApp extends React.Component {
   };
   render() {
     return (
-      <Router>
         <div>
           <Route
             exact
@@ -94,7 +93,6 @@ class BooksApp extends React.Component {
             )}
           />
         </div>
-      </Router>
     );
   }
 }
