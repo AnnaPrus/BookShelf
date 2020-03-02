@@ -25,12 +25,9 @@ class SearchPage extends React.Component {
      
           <ol className="books-grid">
             {books && books.map((book, index) => {
-              if (book.shelf === 'none'){
+            
                 return <Book key={book.id}  book={book} index={index} onChange={onChange} />;
-              } 
-              else {
-                return console.log('This book is already in the shelves');
-              }
+          
             })
             }
           </ol>

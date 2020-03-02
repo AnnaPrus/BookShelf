@@ -7,7 +7,7 @@ import HomePage from "./HomePage";
 class BooksApp extends React.Component {
   state = {
     books: [],
-    booksSearched: []
+    booksSearched: [],
   };
   componentDidMount() {
     BooksAPI.getAll().then(books => {
@@ -29,13 +29,18 @@ class BooksApp extends React.Component {
   };
   updateQuery = event => {
     const { value } = event.target;
+    if (value === '') {
+      this.setState({booksSearched: [] })
+    }
+    else {
     BooksAPI.search(value)
       .then(booksSearched => {
         const newBooks = this.setDefaultShelves(booksSearched);
         this.setState({ booksSearched: newBooks });
       })
       .catch(error => console.log(error));
-  };ß
+    }
+  };
   onShelfChange = (event, book) => {
     const { value } = event.target; 
     const { books } = this.state;
@@ -52,6 +57,10 @@ class BooksApp extends React.Component {
     });
     BooksAPI.update(book, value);
   };
+  onChangeWrapper = (event, book) => {
+    this.setState()
+    this.onShelfChange(event, book)
+  }
   render() {
     return (
       <Router>
