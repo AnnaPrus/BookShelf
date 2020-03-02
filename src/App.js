@@ -9,6 +9,12 @@ class BooksApp extends React.Component {
     books: [],
     booksSearched: []
   };
+  componentDidMount() {
+    BooksAPI.getAll().then(books => {
+      console.log("books: ", books);
+      this.setState({ books });
+    });
+  }
   setDefaultShelves = searchedBooks => {
     const myBooks = this.state.books;
     return searchedBooks.map(book => {
@@ -21,36 +27,46 @@ class BooksApp extends React.Component {
       return book;
     });
   };
+
   updateQuery = event => {
     const { value } = event.target;
-    const { books } = this.state;
-    BooksAPI.search(value)
-      .then(booksSearched => {
-        if (booksSearched && booksSearched.length) {
-          const newBooks = this.setDefaultShelves(booksSearched);
-          this.setState({ booksSearched, books: [...books, ...newBooks] });
-        } else {
-          this.setState({ booksSearched: [] });
-        }
-      })
-      .catch(error => console.log(error));
+    if (value === "") {
+      this.setState({ booksSearched: [] });
+    } else {
+      BooksAPI.search(value)
+        .then(booksSearched => {
+          if (booksSearched.error) {
+            this.setState({ booksSearched: [] });
+          } else {
+            const newBooks = this.setDefaultShelves(booksSearched);
+            this.setState({ booksSearched: newBooks });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   };
-  componentDidMount() {
-    BooksAPI.getAll().then(books => {
-      console.log("books: ", books);
-      this.setState({ books });
-    });
-  }
-  onSelfChange = (event, book) => {
+
+  onShelfChange = (event, book) => {
     const { value } = event.target;
     const { books } = this.state;
-    const index = books.indexOf(book);
     const modifiedBooks = [...books];
-    modifiedBooks[index].shelf = value;
+    const index = modifiedBooks.indexOf(book);
+    if (index >= 0) {
+      modifiedBooks[index].shelf = value;
+    } else {
+      book.shelf = value;
+      modifiedBooks.push(book);
+    }
     this.setState({
       books: modifiedBooks
     });
     BooksAPI.update(book, value);
+  };
+  onChangeWrapper = (event, book) => {
+    this.setState({ value: event.target.value });
+    this.onShelfChange(event, book);
   };
   render() {
     return (
@@ -60,7 +76,10 @@ class BooksApp extends React.Component {
             exact
             path="/"
             render={() => (
-              <HomePage books={this.state.books} onChange={this.onSelfChange} />
+              <HomePage
+                books={this.state.books}
+                onChange={this.onChangeWrapper}
+              />
             )}
           />
           <Route
@@ -69,7 +88,7 @@ class BooksApp extends React.Component {
             render={() => (
               <SearchPage
                 books={this.state.booksSearched}
-                onChange={this.onSelfChange}
+                onChange={this.onShelfChange}
                 onSearch={this.updateQuery}
               />
             )}
@@ -80,4 +99,3 @@ class BooksApp extends React.Component {
   }
 }
 export default BooksApp;
-

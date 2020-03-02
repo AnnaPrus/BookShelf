@@ -1,15 +1,17 @@
-import React from 'react';
-
+import React from "react";
 
 class Book extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: this.props.book.shelf};
+    this.state = { value: this.props.book.shelf };
   }
-  
 
+  onChangeWrapper = event => {
+    this.setState({ value: event.target.value });
+    this.props.onChange(event, this.props.book);
+  };
   render() {
-    const {onChange, book} = this.props;
+    const { book } = this.props;
 
     return (
       <li>
@@ -23,7 +25,7 @@ class Book extends React.Component {
               }}
             >
               <img
-                src={book.imageLinks.smallThumbnail}
+                src={book.imageLinks ? book.imageLinks.smallThumbnail : ""}
                 alt=""
                 style={{
                   width: 128,
@@ -32,11 +34,12 @@ class Book extends React.Component {
               ></img>
             </div>
             <div className="book-shelf-changer">
-              <select value={this.state.value} onChange={event => onChange(event, book)}>
+              <select
+                value={this.state.value}
+                onChange={event => this.onChangeWrapper(event)}
+              >
                 {book.shelf}
-                <option value="">
-                  Move to...
-                </option>
+                <option value="">Move to...</option>
                 <option value="none">None</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
