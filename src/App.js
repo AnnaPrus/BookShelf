@@ -7,14 +7,14 @@ import HomePage from "./HomePage";
 class BooksApp extends React.Component {
   state = {
     books: [],
-    booksSearched: [],
+    booksSearched: []
   };
   componentDidMount() {
     BooksAPI.getAll().then(books => {
       console.log("books: ", books);
       this.setState({ books });
     });
-  };
+  }
   setDefaultShelves = searchedBooks => {
     const myBooks = this.state.books;
     return searchedBooks.map(book => {
@@ -27,30 +27,37 @@ class BooksApp extends React.Component {
       return book;
     });
   };
+
   updateQuery = event => {
     const { value } = event.target;
-    if (value === '') {
-      this.setState({booksSearched: [] })
-    }
-    else {
-    BooksAPI.search(value)
-      .then(booksSearched => {
-        const newBooks = this.setDefaultShelves(booksSearched);
-        this.setState({ booksSearched: newBooks });
-      })
-      .catch(error => console.log(error));
+    if (value === "") {
+      this.setState({ booksSearched: [] });
+    } else {
+      BooksAPI.search(value)
+        .then(booksSearched => {
+          if (booksSearched.error) {
+            this.setState({ booksSearched: [] });
+          } else {
+            const newBooks = this.setDefaultShelves(booksSearched);
+            this.setState({ booksSearched: newBooks });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   };
+
   onShelfChange = (event, book) => {
-    const { value } = event.target; 
+    const { value } = event.target;
     const { books } = this.state;
     const modifiedBooks = [...books];
     const index = modifiedBooks.indexOf(book);
     if (index >= 0) {
       modifiedBooks[index].shelf = value;
     } else {
-      book.shelf = value
-      modifiedBooks.push(book)
+      book.shelf = value;
+      modifiedBooks.push(book);
     }
     this.setState({
       books: modifiedBooks
@@ -58,9 +65,9 @@ class BooksApp extends React.Component {
     BooksAPI.update(book, value);
   };
   onChangeWrapper = (event, book) => {
-    this.setState()
-    this.onShelfChange(event, book)
-  }
+    this.setState({ value: event.target.value });
+    this.onShelfChange(event, book);
+  };
   render() {
     return (
       <Router>
@@ -69,7 +76,10 @@ class BooksApp extends React.Component {
             exact
             path="/"
             render={() => (
-              <HomePage books={this.state.books} onChange={this.onShelfChange} />
+              <HomePage
+                books={this.state.books}
+                onChange={this.onChangeWrapper}
+              />
             )}
           />
           <Route
@@ -89,4 +99,3 @@ class BooksApp extends React.Component {
   }
 }
 export default BooksApp;
-

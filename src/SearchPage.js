@@ -1,17 +1,16 @@
-import React from 'react';
-import {Link} from "react-router-dom";
-import Book from './Book';
+import React from "react";
+import { Link } from "react-router-dom";
+import Book from "./Book";
 
 class SearchPage extends React.Component {
-
   render() {
-    const { onSearch, onChange, books} = this.props;
+    const { onSearch, onChange, books } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
-        <Link to='/'>
-            <button className="close-search"  >Close</button>
-        </Link>
+          <Link to="/">
+            <button className="close-search">Close</button>
+          </Link>
           <div className="search-books-input-wrapper">
             {}
             <input
@@ -22,16 +21,19 @@ class SearchPage extends React.Component {
           </div>
         </div>
         <div className="search-books-results">
-     
           <ol className="books-grid">
-            {books && books.map((book, index) => {
-            
-                return <Book key={book.id}  book={book} index={index} onChange={onChange} />;
-          
-            })
-            }
+            {books &&
+              books.map((book, index) => {
+                return (
+                  <Book
+                    key={book.id}
+                    book={book}
+                    index={index}
+                    onChange={onChange}
+                  />
+                );
+              })}
           </ol>
- 
         </div>
       </div>
     );
